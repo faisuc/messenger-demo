@@ -475,22 +475,12 @@ window.WebRTCManager = (function () {
             const peer = new RTCPeerConnection({
                 iceServers: [
                     {
-                        urls: "stun:tippindev.com:5349",
-                        username: "ajnozari",
-                        credential: "8BrBQffgdFHoFRQDucvZ"
-                    },
-                    {
                         urls : [
                             "stun:stun.l.google.com:19302",
                             "stun:stun1.l.google.com:19302",
                             "stun:stun2.l.google.com:19302"
                         ]
                     },
-                    {
-                        urls: "turn:tippindev.com:5349",
-                        username: "ajnozari",
-                        credential: "8BrBQffgdFHoFRQDucvZ"
-                    }
                 ]}
             );
             peer.onnegotiationneeded = function(){

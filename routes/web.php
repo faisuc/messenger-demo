@@ -35,7 +35,6 @@ Route::group(['middleware' => ['auth', 'IsActive']], function () {
     Route::post('/social/networks', 'SocialController@handleNetworks');
     Route::get('/images/messenger/groups/{thread_id}/{image?}/{thumb?}', 'ImageController@MessengerGroupAvatarView')->name('group_avatar');
     Route::get('/download/messenger/{message_id}', 'DownloadsController@MessengerDownloadDocument');
-    Route::get('/download/resume/{slug}/{file_name}', 'DownloadsController@PortfolioResumeDownload');
     Route::get('/images/messenger/{message_id}/{thumb?}', 'ImageController@MessengerPhotoView');
     Route::post('/messenger/join/{slug}', 'MessagesController@joinInviteLink');
 
