@@ -236,7 +236,7 @@ window.ThreadTemplates = (function () {
         },
         pending_message : function(data){
             return '<div id="pending_message_'+data.message_id+'" class="message my-message"><div class="message-body"><div class="message-body-inner"><div class="message-info">' +
-                '<h5> <i class="far fa-clock"></i>less than a minute ago</h5></div><hr><div class="message-text">' +
+                '<h5> <i class="far fa-clock"></i>a few seconds ago</h5></div><hr><div class="message-text">' +
                 templates.message_body(data, true) +
                 '</div></div></div>' +
                 '<div id="pending_message_loading_'+data.message_id+'" class="float-right mr-1 pt-2 h6 text-primary NS"><span title="Sending..." class="spinner-border spinner-border-sm"></span></div>' +
@@ -265,7 +265,7 @@ window.ThreadTemplates = (function () {
         message : function(data){
             return '<div id="message_'+data.message_id+'" class="message info"><a href="'+data.slug+'" target="_blank"><img title="'+TippinManager.format().escapeHtml(data.name)+'" class="rounded-circle message-avatar" src="'+data.avatar+'"></a>' +
                 '<div class="message-body"><div class="message-body-inner"><div class="message-info">' +
-                '<h4>'+data.name+'</h4><h5> <i class="far fa-clock"></i><time title="'+TippinManager.format().makeUtcLocal(data.utc_created_at)+'" class="timeago" datetime="'+data.utc_created_at+'">'+TippinManager.format().makeTimeAgo(data.utc_updated_at)+'</time></h5></div><hr><div class="message-text">' +
+                '<h4>'+data.name+'</h4><h5> <i class="far fa-clock"></i><time title="'+TippinManager.format().makeUtcLocal(data.utc_created_at)+'" class="timeago" datetime="'+data.utc_created_at+'">'+TippinManager.format().makeTimeAgo(data.utc_created_at)+'</time></h5></div><hr><div class="message-text">' +
                 templates.message_body(data, false) +
                 '</div></div></div>' +templates.message_archive(data, false)+ '<div class="clearfix"></div></div>'
         },
