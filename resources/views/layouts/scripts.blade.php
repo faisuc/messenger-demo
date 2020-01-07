@@ -6,9 +6,9 @@
     TippinManager.init({
         load : {
             NotifyManager : {
-                message_popups : {{$current_model->messengerSettings->message_popups}},
-                message_sound : {{$current_model->messengerSettings->message_sound}},
-                call_ringtone_sound : {{$current_model->messengerSettings->call_ringtone_sound}},
+                message_popups : {{$current_model->messenger->message_popups}},
+                message_sound : {{$current_model->messenger->message_sound}},
+                call_ringtone_sound : {{$current_model->messenger->call_ringtone_sound}},
                 src : '{{mix("js/managers/NotifyManager.js")}}'
             },
         @stack('TippinManager-load')

@@ -60,7 +60,14 @@ class AuthStatusController extends Controller
                     }
                 }
                 try{
-                    $this->modelType()->messengerSettings->touch();
+                    if($this->request->ip() !== $this->modelType()->messenger->ip){
+                        $this->modelType()->messenger->ip = $this->request->ip();
+                        $this->modelType()->messenger->timezone = geoip()->getLocation($this->request->ip())->getAttribute('timezone');
+                        $this->modelType()->messenger->save();
+                    }
+                    else{
+                        $this->modelType()->messenger->touch();
+                    }
                     $notify = $this->modelType()->unreadNotifications->count();
                     $threads = $this->modelType()->unreadThreadsCount();
                     $active_calls = MessengerRepo::MakeActiveCalls($this->modelType());

@@ -2,10 +2,17 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Illuminate\Http\Request;
 use View;
 
 class SearchController extends Controller
 {
+    protected $privacy;
+    public function __construct(Request $request)
+    {
+        parent::__construct($request);
+    }
+
     public function index()
     {
         $users = [];

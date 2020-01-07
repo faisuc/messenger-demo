@@ -3,12 +3,13 @@
 namespace App\Models\Messages;
 
 use App\GhostUser;
+use App\Traits\FormatsDate;
 use App\Traits\Uuids;
 use Illuminate\Database\Eloquent\Model;
 
 class Calls extends Model
 {
-    use Uuids;
+    use Uuids, FormatsDate;
     public $incrementing = false;
 
     public function owner()

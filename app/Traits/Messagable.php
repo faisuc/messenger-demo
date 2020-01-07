@@ -2,7 +2,6 @@
 
 namespace App\Traits;
 
-use App\User;
 use Cache;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -15,9 +14,9 @@ trait Messagable
      * @return \Illuminate\Database\Eloquent\Relations\MorphOne
      *
      */
-    public function messengerSettings()
+    public function messenger()
     {
-        return $this->morphOne('App\Models\Messages\MessengerSettings', 'owner');
+        return $this->morphOne('App\Models\Messages\Messenger', 'owner');
     }
 
     public function getOnlineStatusNumberAttribute()
@@ -29,10 +28,10 @@ trait Messagable
     {
         $online = Cache::has(strtolower(class_basename($this)).'_online_'.$this->id);
         $away = Cache::has(strtolower(class_basename($this)).'_away_'.$this->id);
-        if($this->messengerSettings->online_status === 0){
+        if($this->messenger->online_status === 0){
             return 0;
         }
-        if($online && $this->messengerSettings->online_status === 2){
+        if($online && $this->messenger->online_status === 2){
             return 2;
         }
 
@@ -43,10 +42,10 @@ trait Messagable
     {
         $online = Cache::has(strtolower(class_basename($this)).'_online_'.$this->id);
         $away = Cache::has(strtolower(class_basename($this)).'_away_'.$this->id);
-        if($this->messengerSettings->online_status === 0){
+        if($this->messenger->online_status === 0){
             return 'offline';
         }
-        if($online && $this->messengerSettings->online_status === 2){
+        if($online && $this->messenger->online_status === 2){
             return 'away';
         }
 

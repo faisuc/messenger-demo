@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Services\Messenger\MessageService;
 use App\Services\Messenger\MessengerService;
-use App\Models\User\UserInfo;
 use Illuminate\Http\Request;
 
 class DownloadsController extends Controller

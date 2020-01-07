@@ -1,30 +1,29 @@
 <?php
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//THESE ROUTES ARE FOR LOGIN AND REGISTER, REMOVED LARAVEL DEFAULTS/////////////////////////////////////////////////////////////////////////
+//THESE ROUTES CAN BE PROCESSED AS GUEST OR AUTH/////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Route::post('/logout', 'Auth\LoginController@logout');
 Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('/login', 'Auth\LoginController@login');
 Route::get('/register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 Route::post('/register', 'Auth\RegisterController@register');
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//THESE ROUTES CAN BE PROCESSED AS GUEST OR AUTH/////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-Route::post('/logout', 'Auth\LoginController@logout');
 Route::get('/search', ['as'=>'search','uses'=>'SearchController@index']);
+Route::get('/Contact', 'HomeController@contactUs')->name('contact_us');
+Route::post('/Contact/send', 'HomeController@contactSend');
 Route::get('/images/profile/{slug}/{full?}/{image?}/{full_two?}', 'ImageController@ProfileImageView')->name('profile_img');
 Route::get('/user/profile/{slug}/{redirect?}', 'ProfileController@viewUserProfile')->name('user_profile');
 Route::post('/auth/heartbeat', 'Auth\AuthStatusController@authHeartBeat');
 Route::get('/auth/heartbeat', 'Auth\AuthStatusController@authHeartBeat');
 Route::get('/messenger/join/{slug}', 'MessagesController@joinInviteLink')->name('messenger_invite_join');
 
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //THESE ROUTES CAN BE PROCESSED AS GUEST ONLY////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Route::group(['middleware' => ['guest']], function () {
-    Route::get('/', function () {
-        return view('splash');
-    });
+    Route::get('/', 'HomeController@splash');
+    Route::get('/auth/accounts', 'HomeController@availableAccounts');
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -36,6 +35,7 @@ Route::group(['middleware' => ['auth', 'IsActive']], function () {
     Route::post('/social/networks', 'SocialController@handleNetworks');
     Route::get('/images/messenger/groups/{thread_id}/{image?}/{thumb?}', 'ImageController@MessengerGroupAvatarView')->name('group_avatar');
     Route::get('/download/messenger/{message_id}', 'DownloadsController@MessengerDownloadDocument');
+    Route::get('/download/resume/{slug}/{file_name}', 'DownloadsController@PortfolioResumeDownload');
     Route::get('/images/messenger/{message_id}/{thumb?}', 'ImageController@MessengerPhotoView');
     Route::post('/messenger/join/{slug}', 'MessagesController@joinInviteLink');
 
@@ -56,4 +56,5 @@ Route::group(['middleware' => ['auth', 'IsActive']], function () {
         Route::post('/update/{thread_id}', 'MessagesController@update');
         Route::post('update/{thread_id}/message', 'MessagesController@storeMessage')->middleware('throttle:20,1');
     });
+
 });

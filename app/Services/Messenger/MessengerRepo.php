@@ -11,9 +11,9 @@ use Exception;
 
 class MessengerRepo
 {
-    public static function MakeMessengerSettings($model)
+    public static function MakeMessenger($model)
     {
-        $settings = $model->messengerSettings;
+        $settings = $model->messenger;
         return [
             'message_popups' => $settings->message_popups,
             'message_sound' => $settings->message_sound,
@@ -28,7 +28,7 @@ class MessengerRepo
     {
         $threads = collect([]);
         try{
-            $_threads = ThreadService::LocateThreads($model, 0, ['participants.owner.messengerSettings', 'participants.owner.info', 'activeCall', 'messages.owner', 'calls.participants.owner']);
+            $_threads = ThreadService::LocateThreads($model, 0, ['participants.owner.messenger', 'participants.owner.info', 'activeCall', 'messages.owner', 'calls.participants.owner']);
             if($_threads){
                 $_threads->each(function($thread) use($threads, $model){
                     $construct = self::MakeThread($thread, $model);
@@ -182,7 +182,7 @@ class MessengerRepo
             })->each(function($participant) use($bobble_heads, $thread){
                 $last_message = ThreadService::LastSeenMessage($thread, $participant);
                 $bobble_heads->push([
-                    'last_active' => ($participant->owner->messengerSettings->online_status === 0 ? null : $participant->owner->messengerSettings->updated_at->toDateTimeString()),
+                    'last_active' => ($participant->owner->messenger->online_status === 0 ? null : $participant->owner->messenger->updated_at->toDateTimeString()),
                     'owner_id' => $participant->owner_id,
                     'owner_type' => $participant->owner_type,
                     'name' => $participant->owner->name,
@@ -211,7 +211,7 @@ class MessengerRepo
                 'type' => strtolower(class_basename($party->owner)),
                 'network' => $network,
                 'can_call' => ThreadService::CanStartCall($thread, $participant, $network),
-                'knoks' => $party->owner->messengerSettings->knoks
+                'knoks' => $party->owner->messenger->knoks
             ];
         }catch (Exception $e){
             report($e);

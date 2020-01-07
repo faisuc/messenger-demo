@@ -60,7 +60,7 @@ class PushNotificationService
             ],
             'extraPayLoad' => $data['data']
         ])
-        ->setUrl((config('app.env') === 'production') ? 'ssl://gateway.push.apple.com' : 'ssl://gateway.sandbox.push.apple.com')
+        ->setUrl((config('app.env') === 'production') ? 'ssl://gateway.push.apple.com:2195' : 'ssl://gateway.sandbox.push.apple.com:2195')
         ->setDevicesToken($this->apple)
         ->send();
     }

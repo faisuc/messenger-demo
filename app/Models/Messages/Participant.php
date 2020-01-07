@@ -3,13 +3,14 @@
 namespace App\Models\Messages;
 
 use App\GhostUser;
+use App\Traits\FormatsDate;
 use App\Traits\Uuids;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Participant extends Eloquent
 {
-    use SoftDeletes, Uuids;
+    use SoftDeletes, Uuids, FormatsDate;
     public $incrementing = false;
 
     /**

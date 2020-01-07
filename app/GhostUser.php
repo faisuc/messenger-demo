@@ -1,6 +1,6 @@
 <?php
 namespace App;
-use App\Models\Messages\MessengerSettings;
+use App\Models\Messages\Messenger;
 use App\Models\User\UserInfo;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
@@ -11,13 +11,13 @@ class GhostUser extends Eloquent
         'id' => '12345678-aaaa-4321-9df7-c8296b601234',
         'firstName' => 'Ghost',
         'lastName' => 'User',
-        'email' => 'ghost@ghost.com'
+        'email' => 'ghost@tippindev.com'
     ];
 
-    public function messengerSettings()
+    public function messenger()
     {
         return $this->newBelongsTo($this->newQuery(), $this, '', '', '')->withDefault(function(){
-            return new MessengerSettings([
+            return new Messenger([
                 'owner_id' => $this->id,
                 'owner_type' => 'App\User',
                 'online_status' => 0,

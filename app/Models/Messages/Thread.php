@@ -2,6 +2,7 @@
 
 namespace App\Models\Messages;
 
+use App\Traits\FormatsDate;
 use App\Traits\Uuids;
 use Auth;
 use Illuminate\Database\Eloquent\Model as Eloquent;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Thread extends Eloquent
 {
-    use SoftDeletes, Uuids;
+    use SoftDeletes, Uuids, FormatsDate;
     public $incrementing = false;
 
     /**

@@ -3,13 +3,14 @@
 namespace App\Models\Messages;
 
 use App\GhostUser;
+use App\Traits\FormatsDate;
 use App\Traits\Uuids;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Message extends Eloquent
 {
-    use SoftDeletes, Uuids;
+    use SoftDeletes, Uuids, FormatsDate;
     public $incrementing = false;
 
     /**
@@ -31,7 +32,7 @@ class Message extends Eloquent
      *
      * @var array
      */
-    protected $fillable = ['thread_id','mtype', 'body','owner_type','owner_id'];
+    protected $guarded = [];
 
     /**
      * The attributes that should be mutated to dates.

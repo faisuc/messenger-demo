@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Cache;
 use Validator;
+use Exception;
 
 class LoginController extends Controller
 {
@@ -71,13 +72,27 @@ class LoginController extends Controller
 
     protected function sendFailedLoginResponse()
     {
+        $user = User::withTrashed()->where($this->username(), $this->request->{$this->username()})->first();
+        if ($user && Hash::check($this->request->input('password'), $user->password)){
+            $user->messenger->touch();
+            if(!$user->active && !$user->trashed() && $user->verifyToken->where('type', 1)->first()){
+                return response()->json(['error' => 'Your account is not active', 'type' => 1], 422);
+            }
+            return response()->json(['error' => 'Your account has been disabled. For more information, please contact us from our contact page', 'type' => 2], 422);
+        }
         return response()->json(['error' => 'These credentials do not match our records', 'type' => 0], 401);
     }
 
-    protected function authenticated($request, $user)
+    public function authenticated($request, $user)
     {
         $intended = session()->get('url.intended');
-        $user->messengerSettings->touch();
+        try{
+            $user->messenger->timezone = geoip()->getLocation($this->request->ip())->getAttribute('timezone');
+            $user->messenger->ip = $this->request->ip();
+            $user->messenger->save();
+        }catch (Exception $e){
+            report($e);
+        }
         return response()->json(['auth' => auth()->check(),'intended' => ($intended ? $intended : 'reload')]);
     }
 

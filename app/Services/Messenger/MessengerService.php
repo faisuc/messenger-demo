@@ -2,7 +2,6 @@
 
 namespace App\Services\Messenger;
 
-use App\Services\Service;
 use App\Models\Messages\Thread;
 use App\Services\UploadService;
 use Illuminate\Http\Request;
@@ -10,10 +9,20 @@ use Validator;
 use Exception;
 use File;
 
-class MessengerService extends Service
+class MessengerService
 {
 
-    protected $thread, $participant, $message, $call;
+    protected $request, $thread, $participant, $message, $call;
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
+
+    public function currentProfile()
+    {
+        return $this->request->user();
+    }
 
     public function authorize($thread = null, $load = null)
     {
@@ -50,13 +59,13 @@ class MessengerService extends Service
         $type_loads = [
             'load_thread' => ['participants.owner.info', 'activeCall', 'messages', 'calls'],
             'load_private' => ['participants', 'messages.owner.info', 'activeCall', 'calls.participants.owner'],
-            'load_group' => ['participants.owner.info', 'participants.owner.messengerSettings', 'activeCall', 'messages.owner.info', 'calls.participants.owner'],
-            'bobble_heads' => ['participants.owner.info', 'participants.owner.messengerSettings'],
+            'load_group' => ['participants.owner.info', 'participants.owner.messenger', 'activeCall', 'messages.owner.info', 'calls.participants.owner'],
+            'bobble_heads' => ['participants.owner.info', 'participants.owner.messenger'],
             'recent_messages' => ['participants.owner', 'messages.owner.info', 'calls.participants.owner'],
             'messages' => ['participants.owner', 'messages.owner.info', 'calls.participants.owner'],
             'thread_logs' => ['messages.owner.info', 'calls.participants.owner'],
-            'participants' => ['participants.owner.info', 'participants.owner.messengerSettings'],
-            'add_participants' => ['participants.owner.info', 'participants.owner.messengerSettings'],
+            'participants' => ['participants.owner.info', 'participants.owner.messenger'],
+            'add_participants' => ['participants.owner.info', 'participants.owner.messenger'],
             'group_settings' => ['participants'],
             'mark_read' => ['participants'],
             'group_invite' => ['groupInviteLink.thread'],
@@ -121,7 +130,7 @@ class MessengerService extends Service
                 case 'add_participants':
                     $error = "Permission denied";
                     if(ThreadService::CanAddParticipants($this->thread, $this->participant)){
-                        $data = ThreadService::ContactsFilterAdd($this->thread, $this->currentProfile()->load(['networks.party.info', 'networks.party.messengerSettings']));
+                        $data = ThreadService::ContactsFilterAdd($this->thread, $this->currentProfile()->load(['networks.party.info', 'networks.party.messenger']));
                     }
                 break;
                 case 'group_settings':
@@ -194,7 +203,7 @@ class MessengerService extends Service
             'store_group_invitation' => ['participants', 'groupInviteLink'],
             'participant_admin_grant' => ['participants'],
             'reload_participant' => ['participants'],
-            'send_knock' => ['participants.owner.devices', 'participants.owner.messengerSettings'],
+            'send_knock' => ['participants.owner.devices', 'participants.owner.messenger'],
             'initiate_call' => ['participants.owner', 'activeCall'],
             'join_call' => ['participants.owner', 'activeCall.participants']
         ];
@@ -209,9 +218,9 @@ class MessengerService extends Service
                     else $error = $knock['error'];
                 break;
                 case 'store_messenger_settings':
-                    $settings = self::StoreMessengerSettings($this->request, $this->currentProfile());
+                    $settings = self::StoreMessenger($this->request, $this->currentProfile());
                     if($settings['state']){
-                        $data = MessengerRepo::MakeMessengerSettings($settings['model']);
+                        $data = MessengerRepo::MakeMessenger($settings['model']);
                     }
                     else $error = $settings['error'];
                 break;
@@ -304,6 +313,7 @@ class MessengerService extends Service
                     }
                     else $error = $call['error'];
                 break;
+
                 case 'join_call':
                     $call = CallService::JoinCall($this->thread, $this->currentProfile());
                     if($call['state']){
@@ -468,7 +478,7 @@ class MessengerService extends Service
         }
     }
 
-    private static function StoreMessengerSettings(Request $request, $model)
+    private static function StoreMessenger(Request $request, $model)
     {
         $validator = Validator::make($request->all(),
             [
@@ -487,13 +497,13 @@ class MessengerService extends Service
             ];
         }
         try{
-            $model->messengerSettings->message_popups = $request->input('message_popups');
-            $model->messengerSettings->message_sound = $request->input('message_sound');
-            $model->messengerSettings->call_ringtone_sound = $request->input('call_ringtone_sound');
-            $model->messengerSettings->knoks = $request->input('knoks');
-            $model->messengerSettings->calls_outside_networks = $request->input('calls_outside_networks');
-            $model->messengerSettings->online_status = $request->input('online_status');
-            $model->messengerSettings->save();
+            $model->messenger->message_popups = $request->input('message_popups');
+            $model->messenger->message_sound = $request->input('message_sound');
+            $model->messenger->call_ringtone_sound = $request->input('call_ringtone_sound');
+            $model->messenger->knoks = $request->input('knoks');
+            $model->messenger->calls_outside_networks = $request->input('calls_outside_networks');
+            $model->messenger->online_status = $request->input('online_status');
+            $model->messenger->save();
             return [
                 'state' => true,
                 'model' => $model

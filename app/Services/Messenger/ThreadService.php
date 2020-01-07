@@ -154,7 +154,7 @@ class ThreadService
         }
         if(self::IsPrivate($thread)){
             $party = self::OtherParty($thread, $participant);
-            if(!$party->owner->messengerSettings->calls_outside_networks && (is_null($network) ? $participant->owner->networkStatus($party->owner) : $network) !== 1){
+            if(!$party->owner->messenger->calls_outside_networks && (is_null($network) ? $participant->owner->networkStatus($party->owner) : $network) !== 1){
                 return false;
             }
         }
@@ -520,7 +520,7 @@ class ThreadService
         }
         if(self::IsPrivate($thread)){
             $party = self::OtherParty($thread, $participant);
-            if(!$party->owner->messengerSettings->knoks){
+            if(!$party->owner->messenger->knoks){
                 return [
                     'state' => false,
                     'error' => $party->owner->name.' is not accepting knocks at this time'

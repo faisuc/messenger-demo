@@ -9,17 +9,12 @@ class UserInfo extends Model
     public $incrementing = false;
     protected $primaryKey = 'user_id';
     protected $table = 'user_info';
-    protected $fillable = ['slug', 'picture'];
+    protected $guarded = [];
 
     public function user()
     {
         return $this->belongsTo('App\User')->withDefault(function(){
             return new GhostUser();
         });
-    }
-
-    public function portfolio()
-    {
-        return $this->hasOne('App\Models\User\UserPortfolio', 'user_id');
     }
 }

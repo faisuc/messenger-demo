@@ -11,12 +11,12 @@ class RegisterController extends Controller
     use RegistersUsers;
     protected $redirectTo = '/';
     protected $registerService;
-    public function __construct(Request $request)
+    public function __construct(Request $request, RegisterService $registerService)
     {
         parent::__construct($request);
         $this->middleware('Registration');
         $this->middleware('guest');
-        $this->registerService = new RegisterService($request);
+        $this->registerService = $registerService;
     }
 
     public function register()

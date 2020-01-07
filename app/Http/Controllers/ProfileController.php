@@ -1,10 +1,17 @@
 <?php
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\User;
 
 class ProfileController extends Controller
 {
+
+    public function __construct(Request $request)
+    {
+        parent::__construct($request);
+    }
+
 
     public function viewUserProfile($slug, $redirect = null)
     {

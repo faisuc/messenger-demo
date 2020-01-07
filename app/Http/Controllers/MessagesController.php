@@ -27,7 +27,7 @@ class MessagesController extends Controller
     {
         switch($this->request->type){
             case 'settings':
-                return response()->json(MessengerRepo::MakeMessengerSettings($this->modelType()));
+                return response()->json(MessengerRepo::MakeMessenger($this->modelType()));
             break;
             case 'threads':
                 return response()->json([
@@ -36,12 +36,12 @@ class MessagesController extends Controller
             break;
             case 'contacts':
                 return response()->json([
-                    'html' => View::make('messenger.partials.contacts')->with('networks', $this->modelType()->networks->load(['party.info', 'party.messengerSettings']))->render()
+                    'html' => View::make('messenger.partials.contacts')->with('networks', $this->modelType()->networks->load(['party.info', 'party.messenger']))->render()
                 ]);
             break;
             case 'new_group':
                 return response()->json([
-                    'html' => View::make('messenger.partials.addGroupContacts')->with('networks', $this->modelType()->networks->load(['party.info', 'party.messengerSettings']))->render()
+                    'html' => View::make('messenger.partials.addGroupContacts')->with('networks', $this->modelType()->networks->load(['party.info', 'party.messenger']))->render()
                 ]);
             break;
             case 'load_thread':
@@ -176,7 +176,7 @@ class MessagesController extends Controller
                     return response()->json(['avatar' => $dispatch['data']]);
                 }
                 return response()->json(['errors' => ['forms' => $dispatch["error"]]], 400);
-                break;
+            break;
             case 'remove_messenger_avatar':
                 $dispatch = $this->messenger->routeDestroy('remove_messenger_avatar', false);
                 if($dispatch["state"]){

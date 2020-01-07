@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Http\Requests\Register;
-use App\Models\Messages\MessengerSettings;
+use App\Models\Messages\Messenger;
 use App\User;
 use Auth;
 use App\Models\User\UserInfo;
@@ -27,7 +27,7 @@ class RegisterService extends Service
     {
         $newUser = $this->makeUser(['active' => 1]);
         if($newUser){
-            if(self::makeUserInfo($newUser) && self::makeUserMessengerSettings($newUser)){
+            if(self::makeUserInfo($newUser) && self::makeUserMessenger($newUser)){
                 if(!$mobile) Auth::guard()->login($newUser);
                 return [
                     'state' => true,
@@ -78,13 +78,13 @@ class RegisterService extends Service
         }
     }
 
-    private static function makeUserMessengerSettings($user)
+    private static function makeUserMessenger($user)
     {
         try{
-            $messageSettings = new MessengerSettings();
-            $messageSettings->owner_id = $user->id;
-            $messageSettings->owner_type = "App\User";
-            $messageSettings->save();
+            $messenger = new Messenger();
+            $messenger->owner_id = $user->id;
+            $messenger->owner_type = "App\User";
+            $messenger->save();
             return true;
         }catch (Exception $e){
             report($e);

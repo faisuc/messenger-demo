@@ -2,13 +2,15 @@
 
 namespace App\Models\Messages;
 
+use App\Traits\FormatsDate;
 use Illuminate\Database\Eloquent\Model;
 
-class MessengerSettings extends Model
+class Messenger extends Model
 {
+    use FormatsDate;
     public $incrementing = false;
     protected $primaryKey = 'owner_id';
-    protected $fillable = ['owner_id', 'owner_type', 'online_status', 'knoks'];
+    protected $guarded = [];
 
     public function owner()
     {

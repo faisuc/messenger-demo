@@ -46,7 +46,7 @@ class BroadcastService
                     array_push($this->channels, 'private-'.strtolower(class_basename($recipient['model'])).'_notify_'.$recipient['owner_id']);
                 }
                 else{
-                    if($knok && !$recipient->owner->messengerSettings->knoks){
+                    if($knok && !$recipient->owner->messenger->knoks){
                         continue;
                     }
                     if(config('app.mobile_notify') && $recipient->owner_type === "App\User" && $recipient->owner->devices){
