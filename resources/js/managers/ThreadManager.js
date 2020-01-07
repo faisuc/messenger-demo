@@ -209,12 +209,8 @@ window.ThreadManager = (function () {
                     elm.addEventListener(eventName, methods.fileDragDrop, false)
                 });
             }
-            if(typeof $.fn.timeago === 'undefined'){
-                TippinManager.xhr().script({
-                    file : '/js/modules/timestamps.js',
-                    success : mounted.timeAgo
-                })
-            }
+            setInterval(mounted.timeAgo, 45000);
+            mounted.timeAgo();
         },
         toggleApp : function(onComplete){
             if(!opt.states.special_mode) return false;
@@ -340,10 +336,9 @@ window.ThreadManager = (function () {
             });
         },
         timeAgo : function(){
-            $("time.timeago").timeago();
-            setInterval(function(){
-                $("time.timeago").timeago();
-            }, 45000);
+            $("time.timeago").each(function () {
+                $(this).html(TippinManager.format().makeTimeAgo($(this).attr('datetime')))
+            });
         },
         startWatchdog : function(){
             switch(opt.thread.type){
@@ -1557,6 +1552,7 @@ window.ThreadManager = (function () {
             temp.recent_message.message_type = data.message_type;
             temp.recent_message.name = data.name;
             temp.updated_at = data.created_at;
+            temp.utc_updated_at = data.utc_created_at;
             if(temp.thread_type === 1 && data.thread_id !== opt.thread.id) temp.online = 1;
             if(temp.thread_type === 1 && data.thread_id === opt.thread.id && data.owner_id !== TippinManager.common().id){
                 let bobble = methods.locateStorageItem({type : 'bobble', id : data.owner_id}), i = bobble.index;

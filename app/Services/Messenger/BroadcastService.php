@@ -65,7 +65,7 @@ class BroadcastService
     public function broadcastMessage(Message $message)
     {
         try {
-            $data = MessengerRepo::MakeMessage($this->thread, $message);
+            $data = MessengerRepo::MakeMessage($this->thread, $message, null);
             $data['thread_type'] = $this->thread->ttype;
             $data['thread_subject'] = $this->thread->name;
             $notify = [

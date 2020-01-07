@@ -5,6 +5,7 @@ use App\Models\Networks\Networks;
 use App\Models\Networks\PendingNetworks;
 use App\Notifications\NetworksAccept;
 use App\Notifications\NetworksAdd;
+use App\Services\Messenger\MessengerRepo;
 use App\Services\Service;
 use App\Models\User\UserInfo;
 use Illuminate\Http\Request;
@@ -48,7 +49,7 @@ class NetworksService extends Service
     {
         $friends = collect([]);
         try{
-            $model->pendingReceivedNetworks->reverse()->each(function ($friend) use($friends){
+            $model->pendingReceivedNetworks->reverse()->each(function ($friend) use($friends, $model){
                 $friends->push([
                     'id' => $friend->id,
                     'owner_id' => $friend->sender->id,
@@ -56,8 +57,8 @@ class NetworksService extends Service
                     'slug' => $friend->sender->slug(),
                     'avatar' => $friend->sender->avatar,
                     'type' => strtolower(class_basename($friend->sender)),
-                    'time_ago' => $friend->created_at->diffForHumans(),
-                    'created_at' => $friend->created_at->toDateTimeString()
+                    'created_at' => MessengerRepo::FormatDateTimezone($friend->created_at, $model)->toDateTimeString(),
+                    'utc_created_at' => $friend->created_at->toDateTimeString()
                 ]);
             });
         }catch (Exception $e){

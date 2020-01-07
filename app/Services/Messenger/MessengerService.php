@@ -110,13 +110,13 @@ class MessengerService
                     $data = MessengerRepo::MakeBobbleHeads($this->thread, $this->currentProfile());
                 break;
                 case 'recent_messages':
-                    $data = MessengerRepo::MakeThreadMessages($this->thread, MessageService::PullMessagesMethod($this->thread));
+                    $data = MessengerRepo::MakeThreadMessages($this->thread, MessageService::PullMessagesMethod($this->thread), $this->currentProfile());
                 break;
                 case 'messages':
-                    $data = MessengerRepo::MakeThreadMessages($this->thread, MessageService::PullMessagesMethod($this->thread, 25, ['type' => 'history', 'message_id' => $this->request->message_id]));
+                    $data = MessengerRepo::MakeThreadMessages($this->thread, MessageService::PullMessagesMethod($this->thread, 25, ['type' => 'history', 'message_id' => $this->request->message_id]), $this->currentProfile());
                 break;
                 case 'thread_logs':
-                    $data = MessengerRepo::MakeThreadMessages($this->thread, MessageService::PullMessagesMethod($this->thread, null, ['type' => 'logs']));
+                    $data = MessengerRepo::MakeThreadMessages($this->thread, MessageService::PullMessagesMethod($this->thread, null, ['type' => 'logs']), $this->currentProfile());
                 break;
                 case 'participants':
                     $error = "Permission denied";
@@ -249,7 +249,7 @@ class MessengerService
                     $message = MessageService::StoreNewMessage($this->request, $this->thread, $this->participant, $this->currentProfile());
                     if($message['state']){
                         ParticipantService::MarkRead($this->participant);
-                        $data = MessengerRepo::MakeMessage($this->thread, $message['data']);
+                        $data = MessengerRepo::MakeMessage($this->thread, $message['data'], $this->currentProfile());
                     }
                     else $error = $message['error'];
                 break;

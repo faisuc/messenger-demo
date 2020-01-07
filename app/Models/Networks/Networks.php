@@ -2,13 +2,12 @@
 namespace App\Models\Networks;
 
 use App\GhostUser;
-use App\Traits\FormatsDate;
 use App\Traits\Uuids;
 use Illuminate\Database\Eloquent\Model;
 
 class Networks extends Model
 {
-    use Uuids, FormatsDate;
+    use Uuids;
     public $incrementing = false;
     protected $table = 'networks';
     protected $fillable = ['owner_id', 'owner_type','party_id', 'party_type','status'];

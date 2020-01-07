@@ -2,7 +2,6 @@
 
 namespace App\Models\Messages;
 
-use App\Traits\FormatsDate;
 use App\Traits\Uuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,7 +11,7 @@ use Illuminate\Support\Str;
 
 class GroupInviteLink extends Model
 {
-    use Uuids, SoftDeletes, FormatsDate;
+    use Uuids, SoftDeletes;
     public $incrementing = false;
     protected $table = 'thread_invites';
     protected $dates = ['expires_at'];

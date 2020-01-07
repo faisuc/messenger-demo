@@ -118,6 +118,12 @@ window.TippinManager = (function () {
         }
     },
     format = {
+        makeUtcLocal : function(date){
+            return moment.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
+        },
+        makeTimeAgo : function(date){
+            return moment(format.makeUtcLocal(date)).fromNow()
+        },
         escapeHtml : function(text) {
             let map = {
                 '&': '&amp;',

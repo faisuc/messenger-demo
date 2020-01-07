@@ -2,14 +2,13 @@
 namespace App\Models\Networks;
 
 use App\GhostUser;
-use App\Traits\FormatsDate;
 use App\Traits\Uuids;
 use Illuminate\Database\Eloquent\Model;
 
 
 class PendingNetworks extends Model
 {
-    use Uuids, FormatsDate;
+    use Uuids;
     public $incrementing = false;
     protected $table = 'networks_pending';
     protected $fillable = ['sender_id', 'sender_type','recipient_id', 'recipient_type'];
